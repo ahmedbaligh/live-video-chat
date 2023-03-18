@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import { Constants } from '@videosdk.live/react-sdk';
+
+import { Lobby } from './pages';
 
 function App() {
+  const [micOn, setMicOn] = useState(false);
+  const [webcamOn, setWebcamOn] = useState(true);
+  const [, setSelectedMic] = useState<{ id: string | undefined }>({ id: undefined });
+  const [, setSelectedWebcam] = useState<{ id: string | undefined }>({ id: undefined });
+  const [meetingMode] = useState(Constants.modes.CONFERENCE);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Lobby
+        setIsMicOn={setMicOn}
+        isMicEnabled={micOn}
+        isWebcamEnabled={webcamOn}
+        setIsWebcamOn={setWebcamOn}
+        setSelectedMic={setSelectedMic}
+        setSelectedWebcam={setSelectedWebcam}
+        meetingMode={meetingMode}
+      />
+    </>
   );
 }
 
