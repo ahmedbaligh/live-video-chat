@@ -4,7 +4,7 @@ import { Button, Center, Flex, Heading, Text, Input } from '@chakra-ui/react';
 import { RiVideoAddFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 
-import { VideoPreview, VideoPreviewProps } from '../components/VideoPreview';
+import { VideoPreview, type VideoPreviewProps } from '../components/VideoPreview';
 
 import { isValidRoom, useCreateMeetingMutation } from '../features/meeting/hooks';
 
@@ -27,12 +27,12 @@ export function Lobby(props: LobbyProps) {
       return toast.error('Invalid Room ID');
     }
 
-    navigate(`/rooms/${roomID}`);
+    navigate('user-details', { state: { roomID } });
   };
 
   const onCreateMeeting = () =>
     createMeeting(undefined, {
-      onSuccess: ({ roomId }) => navigate(`/rooms/${roomId}`),
+      onSuccess: ({ roomId: roomID }) => navigate('user-details', { state: { roomID } }),
       onError: () => toast.error('Something went wrong while trying to create a meeting. Please try again later.')
     });
 
