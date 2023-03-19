@@ -23,7 +23,13 @@ export function ParticipantsGrid({ participantsIDs }: ParticipantsTilesProps) {
   ])!;
 
   return (
-    <Grid templateColumns={`repeat(${participantsPerRow}, 1fr)`} gap="4" alignContent="start">
+    <Grid
+      flex={1}
+      templateColumns={`repeat(${participantsPerRow}, 1fr)`}
+      gap="4"
+      alignContent={{ base: 'start', lg: 'center' }}
+      pb="16"
+    >
       {participantsIDs.map(participantID => (
         <MemoedParticipantTile key={participantID} participantID={participantID} />
       ))}

@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { Text, Center, Flex } from '@chakra-ui/react';
 
 import ReactPlayer from 'react-player';
+import { getInitials } from '../../../../utils/strings';
 
 interface ParticipantTileProps {
   participantID: string;
@@ -44,6 +45,8 @@ export const ParticipantTile = ({ participantID }: ParticipantTileProps) => {
       bg="gray.700"
       rounded="lg"
       overflow="hidden"
+      transform="auto"
+      scaleX={webcamOn ? -1 : 1}
     >
       <audio ref={micRef} autoPlay muted={isLocal} />
 
@@ -57,12 +60,12 @@ export const ParticipantTile = ({ participantID }: ParticipantTileProps) => {
           url={webcamMediaStream}
           width="100%"
           height="100%"
-          onError={err => console.log(err, 'participant video error')}
+          onError={() => toast.error(`Failed to play ${displayName}'s video.`)}
         />
       ) : (
         <Center boxSize="full" zIndex="10" isolation="isolate">
           <Text as={Center} boxSize="20" rounded="full" bg="gray.800" zIndex="10">
-            {displayName[0].toUpperCase()}
+            {getInitials(displayName)}
           </Text>
         </Center>
       )}
