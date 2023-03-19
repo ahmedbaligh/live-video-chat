@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { createCameraVideoTrack, MeetingProvider, useMeeting } from '@videosdk.live/react-sdk';
-import { Flex, Heading, Text } from '@chakra-ui/react';
+import { Center, Flex, Heading, Text } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 
 import { config } from '../config';
@@ -120,9 +120,18 @@ const BaseRoom = memo(({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLea
 
   return (
     <Flex flex={1} ref={containerRef} flexDir="column" gap="12" bg="gray.800">
-      {isParticipantAllowedToJoin === null && !meeting.isMeetingJoined && <Text>Waiting to join meeting...</Text>}
+      {isParticipantAllowedToJoin === null && !meeting.isMeetingJoined && (
+        <Center flex={1} gap="16" flexDir="column" fontSize="xl">
+          <Loader flex="unset" />
+          Waiting to join meeting...
+        </Center>
+      )}
 
-      {isParticipantAllowedToJoin === false && <Text>Participant not allowed to join meeting</Text>}
+      {isParticipantAllowedToJoin === false && (
+        <Center flex={1} color="red.500">
+          Participant not allowed to join meeting! Try again later.
+        </Center>
+      )}
 
       {isParticipantAllowedToJoin && (
         <>

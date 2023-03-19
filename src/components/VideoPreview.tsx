@@ -1,6 +1,8 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
-import { Flex, IconButton, Center } from '@chakra-ui/react';
+import { Flex, Center } from '@chakra-ui/react';
 import { RiMicFill, RiMicOffFill, RiCameraFill, RiCameraOffFill } from 'react-icons/ri';
+
+import { IconButton } from './IconButton';
 
 export interface VideoPreviewProps {
   isMicEnabled: boolean;
@@ -182,25 +184,15 @@ export const VideoPreview = ({
       <Flex pos="absolute" bottom="4" gap="3">
         <IconButton
           aria-label="Toggle Mic"
-          title="Toggle Mic"
-          color={isMicOn ? 'green.500' : 'red.500'}
+          color={isMicOn ? 'blue.800' : 'red.500'}
           icon={isMicOn ? <RiMicFill /> : <RiMicOffFill />}
-          boxSize={12}
-          fontSize="xl"
-          rounded="full"
-          minW="unset"
           onClick={onMicToggle}
         />
 
         <IconButton
-          color={isWebcamOn ? 'green.500' : 'red.500'}
+          color={isWebcamOn ? 'blue.800' : 'red.500'}
           aria-label="Toggle Webcam"
-          title="Toggle Webcam"
           icon={isWebcamOn ? <RiCameraFill /> : <RiCameraOffFill color="red" />}
-          boxSize={12}
-          fontSize="xl"
-          rounded="full"
-          minW="unset"
           onClick={onWebcamToggle}
         />
       </Flex>
