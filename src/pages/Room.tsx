@@ -5,10 +5,9 @@ import { Flex, Heading, Text } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 
 import { config } from '../config';
-// import { useRect } from '../hooks';
 import { Loader } from '../components';
 
-import { ControlsBar, InvalidMeeting, ParticipantsTiles } from '../features/meeting/components';
+import { ControlsBar, InvalidMeeting, ParticipantsTiles, MeetingSidebar } from '../features/meeting/components';
 import { useValidateRoomQuery } from '../features/meeting/hooks';
 import { handleMeetingError, setMeetingQuality } from '../features/meeting/helpers';
 import type { MeetingParam, MeetingReturn } from '../features/meeting/types';
@@ -64,8 +63,6 @@ const BaseRoom = memo(({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLea
     onMeetingLeft: onMeetingLeft,
     onError: handleMeetingError
   } as MeetingParam) as MeetingReturn;
-
-  // const { width: containerWidth, height: containerHeight } = useRect(containerRef);
 
   function onEntryResponded(participantID: string, name: string) {
     const localParticipantID = meetingRef.current?.localParticipant?.id;
@@ -147,6 +144,8 @@ const BaseRoom = memo(({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLea
               alignSelf="center"
             />
           </Flex>
+
+          <MeetingSidebar />
         </>
       )}
     </Flex>

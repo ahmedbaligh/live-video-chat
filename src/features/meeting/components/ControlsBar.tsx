@@ -47,7 +47,7 @@ export const ControlsBar = ({ selectedMicID, selectedWebcamID, ...props }: Contr
       gap="2"
       px="6"
       py="3"
-      zIndex="docked"
+      zIndex="popover"
       isolation="isolate"
       bg="gray.700"
       rounded="full"
@@ -161,7 +161,7 @@ const ToggleViewParticipantsButton = () => {
       icon={<HiUsers />}
       bg={sideBarMode === 'PARTICIPANTS' ? 'white' : 'gray.200'}
       color={sideBarMode === 'PARTICIPANTS' ? 'gray.700' : 'gray.800'}
-      onClick={() => setSideBarMode(mode => (mode === 'CHAT' ? null : 'CHAT'))}
+      onClick={() => setSideBarMode(mode => (mode === 'PARTICIPANTS' ? null : 'PARTICIPANTS'))}
     />
   );
 };
