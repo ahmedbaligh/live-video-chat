@@ -1,18 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { useMeeting, usePubSub } from '@videosdk.live/react-sdk';
+import { useMeeting } from '@videosdk.live/react-sdk';
 import { Flex, Grid, Text } from '@chakra-ui/react';
 
 import { formatTime } from '../../../utils/helpers';
-import { toast } from 'react-toastify';
 
-interface Message {
-  id: string;
-  message: string;
-  senderId: string;
-  senderName: string;
-  timestamp: string;
-  topic: string;
-}
+import type { Message } from '../types';
 
 interface ChatMessageProps {
   message: Message;
@@ -59,26 +51,20 @@ const ChatMessage = ({ message: { senderId, senderName, message, timestamp } }: 
   );
 };
 
-export const ChatMessages = () => {
+export const ChatMessages = ({ messages }: { messages: Message[] }) => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const { messages } = usePubSub('CHAT');
 
   useEffect(() => {
-    notificationAudio.play();
+    const scrollToBottom = () => {
+      if (!messagesContainerRef.current) return;
 
-    const latestMessage: Message | undefined = messages?.[messages.length - 1];
-    toast.info(latestMessage?.message ?? 'New message received', {
-      position: 'bottom-left',
-      hideProgressBar: true,
-      autoClose: 2000
-    });
+      messagesContainerRef.current.children[messagesContainerRef.current.children.length - 1].scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    };
 
-    if (!messagesContainerRef.current) return;
-
-    messagesContainerRef.current.children[messagesContainerRef.current.children.length - 1].scrollIntoView({
-      behavior: 'smooth',
-      block: 'end'
-    });
+    scrollToBottom();
   }, [messages]);
 
   return (
@@ -93,5 +79,3 @@ export const ChatMessages = () => {
     </Grid>
   );
 };
-
-const notificationAudio = new Audio('https://static.videosdk.live/prebuilt/notification.mp3');

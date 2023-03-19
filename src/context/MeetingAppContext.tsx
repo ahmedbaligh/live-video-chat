@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import { useContext, createContext, useState } from 'react';
+import { useContext, createContext, useState, ReactNode } from 'react';
 
 interface MeetingAppContextProps {
   meetingType: MeetingType;

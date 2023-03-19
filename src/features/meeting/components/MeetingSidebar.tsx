@@ -12,10 +12,12 @@ import {
 
 import { useMeetingAppContext } from '../../../context/MeetingAppContext';
 
-import { ParticipantsList } from './';
 import { ChatMessages, MessageSender } from '../../chat/components';
+import type { Message } from '../../chat/types';
 
-export function MeetingSidebar() {
+import { ParticipantsList } from './';
+
+export function MeetingSidebar({ messages }: { messages: Message[] }) {
   const { participants } = useMeeting();
 
   const { sideBarMode, setSideBarMode } = useMeetingAppContext();
@@ -24,7 +26,7 @@ export function MeetingSidebar() {
     <Drawer isOpen={!!sideBarMode} onClose={() => setSideBarMode(null)} size="sm">
       <DrawerOverlay />
 
-      <DrawerContent gap="4" bg="gray.800">
+      <DrawerContent gap="4" bg="gray.800" pb="2">
         <DrawerCloseButton mt="6" />
 
         <DrawerHeader pt="8">
@@ -34,7 +36,7 @@ export function MeetingSidebar() {
         <DrawerBody display="flex" flexDir="column" bg="gray.700" px="3" mx="5" py="6" overflowY="auto" rounded="2xl">
           {sideBarMode === 'PARTICIPANTS' && <ParticipantsList />}
 
-          {sideBarMode === 'CHAT' && <ChatMessages />}
+          {sideBarMode === 'CHAT' && <ChatMessages messages={messages} />}
         </DrawerBody>
 
         <DrawerFooter>

@@ -7,3 +7,5 @@ export const formatTime = (time: string) => {
     'minutes'
   );
 };
+
+export const notificationSound = new Audio('https://static.videosdk.live/prebuilt/notification.mp3');

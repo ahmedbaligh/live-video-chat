@@ -1,16 +1,19 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
-import { createCameraVideoTrack, MeetingProvider, useMeeting } from '@videosdk.live/react-sdk';
+import { createCameraVideoTrack, MeetingProvider, useMeeting, usePubSub } from '@videosdk.live/react-sdk';
 import { Center, Flex, Heading, Text } from '@chakra-ui/react';
 import { toast } from 'react-toastify';
 
 import { config } from '../config';
 import { Loader } from '../components';
+import { useMeetingAppContext } from '../context/MeetingAppContext';
+import { notificationSound } from '../utils/helpers';
 
 import { ControlsBar, InvalidMeeting, ParticipantsTiles, MeetingSidebar } from '../features/meeting/components';
 import { useValidateRoomQuery } from '../features/meeting/hooks';
 import { handleMeetingError, setMeetingQuality } from '../features/meeting/helpers';
 import type { MeetingParam, MeetingReturn } from '../features/meeting/types';
+import type { Message } from '../features/chat/types';
 
 interface RoomProps {
   isMicEnabled: boolean;
@@ -56,6 +59,8 @@ const BaseRoom = memo(({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLea
   const containerRef = useRef<HTMLDivElement>(null);
   const meetingRef = useRef<ReturnType<typeof useMeeting>>();
 
+  const { setSideBarMode } = useMeetingAppContext();
+
   const meeting = useMeeting({
     onParticipantJoined: setMeetingQuality,
     onEntryResponded,
@@ -63,6 +68,21 @@ const BaseRoom = memo(({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLea
     onMeetingLeft: onMeetingLeft,
     onError: handleMeetingError
   } as MeetingParam) as MeetingReturn;
+
+  const { messages } = usePubSub('CHAT', {
+    onMessageReceived: ({ message, senderId, senderName }: Message) => {
+      if (senderId === meetingRef.current?.localParticipant?.id) return;
+
+      notificationSound.play();
+
+      toast.info(message ? `${senderName} says: ${message}` : 'New message received', {
+        position: 'bottom-left',
+        hideProgressBar: true,
+        autoClose: 4000,
+        onClick: () => setSideBarMode('CHAT')
+      });
+    }
+  });
 
   function onEntryResponded(participantID: string, name: string) {
     const localParticipantID = meetingRef.current?.localParticipant?.id;
@@ -154,7 +174,7 @@ const BaseRoom = memo(({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLea
             />
           </Flex>
 
-          <MeetingSidebar />
+          <MeetingSidebar messages={messages} />
         </>
       )}
     </Flex>

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { usePubSub } from '@videosdk.live/react-sdk';
-import { Button, Flex, Input } from '@chakra-ui/react';
+import { Button, Flex, FlexProps, Input } from '@chakra-ui/react';
 
-export const MessageSender = () => {
+export const MessageSender = (props: FlexProps) => {
   const [message, setMessage] = useState('');
   const { publish } = usePubSub('CHAT');
 
@@ -14,8 +14,9 @@ export const MessageSender = () => {
   };
 
   return (
-    <Flex as="form" gap="2" onSubmit={onSendMessage}>
+    <Flex as="form" gap="3" onSubmit={onSendMessage} {...props}>
       <Input
+        autoFocus
         variant="flushed"
         placeholder="Send a message to the meeting"
         value={message}
