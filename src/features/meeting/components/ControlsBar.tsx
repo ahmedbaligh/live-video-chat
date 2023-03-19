@@ -74,7 +74,7 @@ const RaiseHandButton = () => {
       aria-label="Raise Hand"
       icon={<HiHandRaised />}
       color="orange.400"
-      onClick={() => publish('Raise Hand', { persist: false })}
+      onClick={() => publish('Raise Hand', { persist: true })}
     />
   );
 };

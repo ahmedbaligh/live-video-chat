@@ -8,6 +8,8 @@ export const GetParticipantDetails = (props: CenterProps) => {
   const navigate = useNavigate();
   const meetingID = useLocation().state?.roomID as string;
 
+  if (!meetingID) navigate('/');
+
   const onDetailsSubmit = (e: React.FormEvent<HTMLFormElement | HTMLDivElement>) => {
     e.preventDefault();
     navigate(`/rooms/${meetingID}`, { state: { participantName: name } });
