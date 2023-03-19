@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { createCameraVideoTrack, MeetingProvider, useMeeting } from '@videosdk.live/react-sdk';
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Heading, Text } from '@chakra-ui/react';
+import { toast } from 'react-toastify';
 
 import { config } from '../config';
+// import { useRect } from '../hooks';
 import { Loader } from '../components';
 
-import { InvalidMeeting } from '../features/meeting/components';
+import { InvalidMeeting, ParticipantsTiles } from '../features/meeting/components';
 import { useValidateRoomQuery } from '../features/meeting/hooks';
 import { handleMeetingError, setMeetingQuality } from '../features/meeting/helpers';
 import type { MeetingParam, MeetingReturn } from '../features/meeting/types';
@@ -21,7 +23,7 @@ interface RoomProps {
 
 export const Room = (props: RoomProps) => {
   const roomID = useParams().roomID as string;
-  const participantName: string | undefined = useLocation().state?.participantName;
+  const participantName = useLocation().state?.participantName as string;
 
   const { isValidRoom, isLoading } = useValidateRoomQuery(roomID);
 
@@ -50,7 +52,7 @@ export const Room = (props: RoomProps) => {
   );
 };
 
-function BaseRoom({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLeave, isWebcamEnabled }: RoomProps) {
+const BaseRoom = memo(({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLeave, isWebcamEnabled }: RoomProps) => {
   const [isParticipantAllowedToJoin, setIsParticipantAllowedToJoin] = useState<boolean | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const meetingRef = useRef<ReturnType<typeof useMeeting>>();
@@ -63,6 +65,8 @@ function BaseRoom({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLeave, i
     onError: handleMeetingError
   } as MeetingParam) as MeetingReturn;
 
+  // const { width: containerWidth, height: containerHeight } = useRect(containerRef);
+
   function onEntryResponded(participantID: string, name: string) {
     const localParticipantID = meetingRef.current?.localParticipant?.id;
 
@@ -71,7 +75,6 @@ function BaseRoom({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLeave, i
     if (name === 'allowed') return setIsParticipantAllowedToJoin(true);
 
     setIsParticipantAllowedToJoin(false);
-    // onMeetingLeave();
   }
 
   async function onMeetingJoined() {
@@ -111,21 +114,33 @@ function BaseRoom({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLeave, i
     // setParticipantName('');
   }
 
+  const copyMeetingLink = () =>
+    navigator.clipboard.writeText(meeting.meetingId).then(() => toast.success('Meeting ID copied to clipboard'));
+
   useEffect(() => {
     meetingRef.current = meeting;
   }, [meeting]);
 
   return (
-    <Flex ref={containerRef} flexDir="column" h="100vh" bg="gray.800">
+    <Flex flex={1} ref={containerRef} flexDir="column" gap="12" bg="gray.800">
       {isParticipantAllowedToJoin === null && !meeting.isMeetingJoined && <Text>Waiting to join meeting...</Text>}
 
       {isParticipantAllowedToJoin === false && <Text>Participant not allowed to join meeting</Text>}
 
       {isParticipantAllowedToJoin && (
-        <Flex flex={1} bg="gray.800">
-          Meeting with {meeting.localParticipant.displayName}
-        </Flex>
+        <>
+          <Heading as="h1" color="gray.400" textAlign="center" _hover={{ '& > p': { color: 'white' } }}>
+            Meeting{' '}
+            <Text display="inline-block" transition="color 0.3s" cursor="pointer" onClick={copyMeetingLink}>
+              {meeting.meetingId}
+            </Text>
+          </Heading>
+
+          <Flex flex={1} bg="gray.800">
+            <ParticipantsTiles isPresenting={false} />
+          </Flex>
+        </>
       )}
     </Flex>
   );
-}
+});
