@@ -3,17 +3,17 @@ import { useContext, createContext, useState } from 'react';
 
 interface MeetingAppContextProps {
   meetingType: MeetingType;
+  setMeetingType: React.Dispatch<React.SetStateAction<MeetingType>>;
+  sideBarMode: SideBarMode;
+  setSideBarMode: React.Dispatch<React.SetStateAction<SideBarMode>>;
   downstreamUrl: string | null;
-  sideBarMode: string | null;
-  setMeetingType: (meetingType: MeetingType) => void;
-  setDownstreamUrl: (downstreamUrl: string) => void;
-  setSideBarMode: (sideBarMode: string | null) => void;
+  setDownstreamUrl: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const MeetingAppContext = createContext<MeetingAppContextProps>({
   meetingType: 'MEETING',
   downstreamUrl: null,
-  sideBarMode: null,
+  sideBarMode: 'PARTICIPANTS',
   setMeetingType: () => {},
   setDownstreamUrl: () => {},
   setSideBarMode: () => {}
@@ -27,7 +27,7 @@ interface MeetingAppProviderProps {
 
 export const MeetingAppProvider = ({ children }: MeetingAppProviderProps) => {
   const [meetingType, setMeetingType] = useState<MeetingType>('MEETING');
-  const [sideBarMode, setSideBarMode] = useState<string | null>(null);
+  const [sideBarMode, setSideBarMode] = useState<SideBarMode>(null);
   const [downstreamUrl, setDownstreamUrl] = useState<string | null>(null);
 
   const sharedObj = {

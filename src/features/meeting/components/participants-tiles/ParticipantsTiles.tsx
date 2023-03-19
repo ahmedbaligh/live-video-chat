@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { Center, Flex, Grid, useBreakpointValue } from '@chakra-ui/react';
+import { Grid, useBreakpointValue } from '@chakra-ui/react';
 import { useMeeting } from '@videosdk.live/react-sdk';
 
 import { ParticipantTile } from './';

@@ -1,6 +1,6 @@
 import { Container } from '@chakra-ui/react';
 import { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import { MeetingAppProvider } from './context/MeetingAppContext';
 import { GetParticipantDetails } from './features/meeting/components';
@@ -11,6 +11,9 @@ export default function App() {
   const [webcamOn, setWebcamOn] = useState(true);
   const [selectedMic, setSelectedMic] = useState<{ id: string | undefined }>({ id: undefined });
   const [selectedWebcam, setSelectedWebcam] = useState<{ id: string | undefined }>({ id: undefined });
+  const { pathname } = useLocation();
+
+  const inMeeting = pathname.includes('/rooms/');
 
   const onMeetingLeave = () => {
     // TODO: Remove production token here
@@ -19,7 +22,7 @@ export default function App() {
   };
 
   return (
-    <Container>
+    <Container maxH={inMeeting ? '100vh' : 'unset'}>
       <Routes>
         <Route
           path="/"

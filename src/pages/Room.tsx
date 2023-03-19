@@ -8,7 +8,7 @@ import { config } from '../config';
 // import { useRect } from '../hooks';
 import { Loader } from '../components';
 
-import { InvalidMeeting, ParticipantsTiles } from '../features/meeting/components';
+import { ControlsBar, InvalidMeeting, ParticipantsTiles } from '../features/meeting/components';
 import { useValidateRoomQuery } from '../features/meeting/hooks';
 import { handleMeetingError, setMeetingQuality } from '../features/meeting/helpers';
 import type { MeetingParam, MeetingReturn } from '../features/meeting/types';
@@ -136,8 +136,16 @@ const BaseRoom = memo(({ isMicEnabled, selectedMic, selectedWebcam, onMeetingLea
             </Text>
           </Heading>
 
-          <Flex flex={1} bg="gray.800">
+          <Flex flex={1} flexDir="column" bg="gray.800">
             <ParticipantsTiles isPresenting={false} />
+
+            <ControlsBar
+              selectedMicID={selectedMic.id}
+              selectedWebcamID={selectedWebcam.id}
+              pos="fixed"
+              bottom="6"
+              alignSelf="center"
+            />
           </Flex>
         </>
       )}
