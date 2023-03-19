@@ -23,6 +23,31 @@ const Container: ChakraTheme['components']['Container'] = {
   }
 };
 
+const Button: ChakraTheme['components']['Button'] = {
+  baseStyle: {
+    minH: 12
+  },
+  variants: {
+    solid: {
+      minW: 'unset',
+      px: 4,
+      py: 3.5,
+      bg: 'blue.500',
+      _hover: { bg: 'blue.600' }
+    }
+  }
+};
+
+const Input = {
+  sizes: {
+    md: {
+      field: {
+        minH: 12
+      }
+    }
+  }
+};
+
 export const theme = () =>
   extendTheme({
     breakPoints,
@@ -47,6 +72,8 @@ export const theme = () =>
       heading: 'Poppins'
     },
     components: {
-      Container
+      Container,
+      Button,
+      Input
     }
   });

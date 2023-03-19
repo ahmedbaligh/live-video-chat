@@ -6,15 +6,16 @@ interface ValidateRoomResponse {
   roomId: string;
 }
 
+const fetcher = (url: string) => api.get<ValidateRoomResponse>(url).then(res => res.data);
+
 export const useValidateRoomQuery = (roomID: string) => {
-  const { data, error, isValidating } = useSWR<ValidateRoomResponse>(`/v2/rooms/validate/${roomID}`);
+  const { data, ...rest } = useSWR<ValidateRoomResponse>(`v2/rooms/validate/${roomID}`, fetcher);
 
   return {
-    isValidRoom: data ? data.roomId === roomID : false,
-    error,
-    isValidating
+    isValidRoom: data?.roomId === roomID,
+    ...rest
   };
 };
 
 export const isValidRoom = (roomID: string) =>
-  api.get<ValidateRoomResponse>(`validate/${roomID}`).then(res => res.data.roomId === roomID);
+  api.get<ValidateRoomResponse>(`v2/rooms/validate/${roomID}`).then(res => res.data.roomId === roomID);

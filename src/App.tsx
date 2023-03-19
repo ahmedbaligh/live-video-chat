@@ -1,8 +1,9 @@
+import { Container } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Container } from '@chakra-ui/react';
 
-import { Lobby } from './pages';
+import { MeetingAppProvider } from './context/MeetingAppContext';
+import { Lobby, Room } from './pages';
 
 export default function App() {
   const [micOn, setMicOn] = useState(false);
@@ -17,13 +18,22 @@ export default function App() {
           path="/"
           element={
             <Lobby
-              setIsMicOn={setMicOn}
               isMicEnabled={micOn}
               isWebcamEnabled={webcamOn}
+              setIsMicOn={setMicOn}
               setIsWebcamOn={setWebcamOn}
               setSelectedMic={setSelectedMic}
               setSelectedWebcam={setSelectedWebcam}
             />
+          }
+        />
+
+        <Route
+          path="/rooms/:roomID"
+          element={
+            <MeetingAppProvider>
+              <Room />
+            </MeetingAppProvider>
           }
         />
       </Routes>
